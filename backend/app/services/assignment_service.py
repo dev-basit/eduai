@@ -59,7 +59,7 @@ Return ONLY valid JSON (no markdown):
   "total_marks": 100
 }}"""
 
-_CHECK_PROMPT = """You are a strict but fair teacher grading a student's assignment.
+_CHECK_PROMPT = """You are an experienced teacher grading a student's assignment. Grade each question carefully using the rules below.
 
 Questions and model answers:
 {questions_json}
@@ -67,13 +67,50 @@ Questions and model answers:
 Student's answers:
 {answers_json}
 
-For each question:
-- MCQ: correct only if exact match with expected_answer
-- Short/Long: check whether key concepts from expected_answer are covered
-- For CORRECT answers: generate ONE challenging follow-up counter question that tests genuine understanding — something they cannot answer just by re-reading their own answer
-- For WRONG answers: set counter_question to null
+GRADING RULES — follow these exactly:
 
-Return ONLY valid JSON (no markdown):
+MCQ:
+- Full marks if the student's answer matches expected_answer exactly (case-insensitive, ignore leading/trailing spaces)
+- 0 marks for any other answer
+- is_correct = true only if full marks awarded
+
+Short answer (partial credit allowed):
+- Identify the key concepts in expected_answer
+- Award marks proportionally: score = round((concepts_covered / total_concepts) * marks)
+- score must be an integer between 0 and the question's marks value — never exceed it
+- is_correct = true only if score equals the question's full marks
+
+Long answer (rubric-based partial credit):
+- Grade across three dimensions: content accuracy (50%), depth of explanation (30%), clarity (20%)
+- Combine into a final score = round(weighted_total * marks)
+- score must be an integer between 0 and the question's marks value — never exceed it
+- is_correct = true only if score equals the question's full marks
+
+SCORING CONSTRAINTS (critical):
+- score is always an integer, never a float
+- score is always >= 0 and <= the question's marks
+- total_score = sum of all individual scores
+- max_score = sum of all question marks
+- percentage = round((total_score / max_score) * 100, 1)
+
+GRADE SCALE:
+- A: 90–100%
+- B: 75–89%
+- C: 60–74%
+- D: 45–59%
+- F: below 45%
+
+COUNTER QUESTIONS:
+- For questions where score == full marks: write ONE challenging follow-up question that tests deeper understanding — not answerable by re-reading the student's own answer
+- For all other questions: set counter_question to null
+
+FEEDBACK:
+- Per question: explain what was correct, what was missed, and what the correct answer is (for wrong/partial answers)
+- strengths: 2-3 specific things the student did well overall
+- areas_for_improvement: 2-3 specific topics or skills to work on
+- recommended_topics: list of topic names the student should study next based on their weak answers
+
+Return ONLY valid JSON (no markdown, no trailing commas, no comments):
 {{
   "total_score": 75,
   "max_score": 100,
@@ -88,24 +125,25 @@ Return ONLY valid JSON (no markdown):
       "score": 5,
       "max_score": 5,
       "is_correct": true,
-      "feedback": "Correct! Well explained.",
-      "counter_question": "Now explain why this would change if the coefficient were negative?"
+      "feedback": "Correct. You clearly explained all key concepts.",
+      "counter_question": "How would your answer change if the input were negative?"
     }},
     {{
       "question_id": 2,
       "question": "...",
       "student_answer": "...",
-      "correct_answer": "Full correct answer here",
-      "score": 0,
+      "correct_answer": "Full model answer here",
+      "score": 4,
       "max_score": 10,
       "is_correct": false,
-      "feedback": "Incorrect. You missed the key concept of X. The correct answer is: ...",
+      "feedback": "Partial credit. You covered X but missed Y and Z. The key idea is: ...",
       "counter_question": null
     }}
   ],
-  "overall_feedback": "Overall assessment of the student's performance",
-  "strengths": ["What they did well"],
-  "areas_for_improvement": ["What to work on"]
+  "overall_feedback": "2-3 sentence assessment of the student's overall performance",
+  "strengths": ["Specific strength 1", "Specific strength 2"],
+  "areas_for_improvement": ["Specific area 1", "Specific area 2"],
+  "recommended_topics": ["Topic A", "Topic B"]
 }}"""
 
 _COUNTER_PROMPT = """You are a teacher checking genuine understanding after a student answered questions correctly.

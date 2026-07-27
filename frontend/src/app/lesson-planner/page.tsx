@@ -184,7 +184,7 @@ function PlanForm({ onQuizReady }: { onQuizReady: (form: FormState, quiz: Planne
         </div>
         <h1 className="text-2xl font-bold text-gray-900">New Study Plan</h1>
         <p className="text-gray-500 text-sm mt-1">
-          Tell us what you want to learn — we'll quiz you first to personalise the plan.
+          Tell us what you want to learn — we&apos;ll quiz you first to personalise the plan.
         </p>
       </div>
 
@@ -205,7 +205,7 @@ function PlanForm({ onQuizReady }: { onQuizReady: (form: FormState, quiz: Planne
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-1.5">
             Topics to cover
-            <span className="text-gray-400 font-normal ml-1">(optional — comma-separated)</span>
+            <span className="text-gray-400 font-normal ml-1">(comma-separated)</span>
           </label>
           <input
             className="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
