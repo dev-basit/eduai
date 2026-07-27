@@ -4,7 +4,6 @@ from pydantic import SecretStr
 class Settings(BaseSettings):
     OPENAI_API_KEY: SecretStr
     LLM_MODEL: str
-    EMBEDDING_MODEL: str
     IS_LLM_LIMIT: bool
     LLM_REQUESTS_PER_DAY: int
 
