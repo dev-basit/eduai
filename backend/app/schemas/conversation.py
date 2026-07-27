@@ -9,6 +9,8 @@ class AskRequest(BaseModel):
 
 class ConversationCreate(BaseModel):
     subject: str | None = None
+    context_type: str | None = None   # "assignment" | "lesson_plan"
+    context_id: str | None = None
 
 
 class MessageResponse(BaseModel):
@@ -25,6 +27,8 @@ class ConversationResponse(BaseModel):
     id: uuid.UUID
     subject: str | None
     title: str
+    context_type: str | None = None
+    context_id: uuid.UUID | None = None
     created_at: datetime
     messages: list[MessageResponse] = []
 

@@ -14,6 +14,8 @@ class Conversation(Base):
     user_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), nullable=True, index=True)
     subject: Mapped[str | None] = mapped_column(String, nullable=True)
     title: Mapped[str] = mapped_column(String, nullable=False, default="New Conversation")
+    context_type: Mapped[str | None] = mapped_column(String, nullable=True)   # "assignment" | "lesson_plan"
+    context_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     messages: Mapped[list["Message"]] = relationship("Message", back_populates="conversation", order_by="Message.created_at")

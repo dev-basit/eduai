@@ -11,7 +11,7 @@ router = APIRouter(prefix="/conversations", tags=["Doubt Solver"])
 
 @router.post("/", response_model=ConversationResponse, status_code=201)
 def new_conversation(body: ConversationCreate, db: Session = Depends(get_db)):
-    return create_conversation(body.subject, db)
+    return create_conversation(body, db)
 
 
 @router.get("/", response_model=list[ConversationResponse])

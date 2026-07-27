@@ -3,8 +3,8 @@
 export interface PlannerQuestion {
   id: string;
   topic: string;
-  difficulty: "easy" | "medium" | "hard";
-  type: "mcq" | "short";
+  difficulty: 'easy' | 'medium' | 'hard';
+  type: 'mcq' | 'short';
   question: string;
   options: string[] | null;
   correct_answer: string;
@@ -80,7 +80,7 @@ export interface Resource {
 export interface Message {
   id: string;
   conversation_id: string;
-  role: "human" | "ai";
+  role: 'human' | 'ai';
   content: string;
   created_at: string;
 }
@@ -89,12 +89,16 @@ export interface Conversation {
   id: string;
   subject: string | null;
   title: string;
+  context_type?: string | null;
+  context_id?: string | null;
   created_at: string;
   messages: Message[];
 }
 
 export interface ConversationCreateDTO {
   subject?: string;
+  context_type?: string;
+  context_id?: string;
 }
 
 export interface AskDTO {
@@ -103,8 +107,8 @@ export interface AskDTO {
 
 // ── Assignments ───────────────────────────────────────────────
 
-export type Difficulty = "easy" | "medium" | "hard";
-export type QuestionType = "mcq" | "short" | "long";
+export type Difficulty = 'easy' | 'medium' | 'hard';
+export type QuestionType = 'mcq' | 'short' | 'long';
 
 export interface Question {
   id: number;
@@ -199,4 +203,3 @@ export interface AssignmentSubmission {
   feedback: AssignmentFeedback;
   created_at: string;
 }
-
