@@ -56,6 +56,25 @@ export interface LessonPlanCreateDTO {
   quiz_answers?: Record<string, string>;
 }
 
+// ── Resources ─────────────────────────────────────────────────
+
+export interface ResourceSection {
+  title: string;
+  topic: string;
+  explanation: string;
+  key_concepts: string[];
+  examples: string[];
+  quick_check: string;
+}
+
+export interface Resource {
+  id: string;
+  lesson_plan_id: string;
+  subject: string;
+  sections: ResourceSection[];
+  created_at: string;
+}
+
 // ── Conversations ─────────────────────────────────────────────
 
 export interface Message {

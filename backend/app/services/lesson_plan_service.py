@@ -155,6 +155,10 @@ def generate_lesson_plan(body: LessonPlanCreate, db: Session, user_id: uuid.UUID
     db.add(record)
     db.commit()
     db.refresh(record)
+
+    from app.services.resource_service import generate_resources
+    generate_resources(record, db)
+
     return LessonPlanResponse.model_validate(record)
 
 
@@ -277,6 +281,10 @@ def improve_lesson_plan(plan_id: uuid.UUID, db: Session) -> LessonPlanResponse:
     db.add(record)
     db.commit()
     db.refresh(record)
+
+    from app.services.resource_service import generate_resources
+    generate_resources(record, db)
+
     return LessonPlanResponse.model_validate(record)
 
 
