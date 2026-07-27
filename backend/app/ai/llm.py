@@ -1,10 +1,14 @@
 from functools import lru_cache
 
-from langchain_ollama import ChatOllama
+from langchain_openai import ChatOpenAI
 
-OLLAMA_MODEL = "gemma4:e2b"
+from app.config import settings
 
 
 @lru_cache
-def get_llm(temperature: float = 0.7) -> ChatOllama:
-    return ChatOllama(model=OLLAMA_MODEL, temperature=temperature, timeout=600)
+def get_llm(temperature: float = 0.7) -> ChatOpenAI:
+    return ChatOpenAI(
+        api_key=settings.OPENAI_API_KEY,
+        model=settings.LLM_MODEL,
+        temperature=temperature,
+    )

@@ -7,5 +7,5 @@ class ChatRole(str, Enum):
 
 
 class AIModel(str, Enum):
-    GEMMA4_E2B = "gemma4:e2b"
-    EMBEDDING = "gemma4:e2b"
+    GPT_4O_MINI = "gpt-4o-mini"
+    EMBEDDING = "text-embedding-3-small"

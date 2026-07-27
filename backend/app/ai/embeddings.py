@@ -1,10 +1,13 @@
 from functools import lru_cache
 
-from langchain_ollama import OllamaEmbeddings
+from langchain_openai import OpenAIEmbeddings
 
-OLLAMA_MODEL = "gemma4:e2b"
+from app.config import settings
 
 
 @lru_cache
-def get_embeddings() -> OllamaEmbeddings:
-    return OllamaEmbeddings(model=OLLAMA_MODEL)
+def get_embeddings() -> OpenAIEmbeddings:
+    return OpenAIEmbeddings(
+        api_key=settings.OPENAI_API_KEY,
+        model=settings.EMBEDDING_MODEL,
+    )

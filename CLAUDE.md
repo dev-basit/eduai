@@ -4,11 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**EduAI** is an AI-powered personalized education platform built for a Gemma hackathon. It uses Google's Gemma 4 model (via Ollama, local inference) to power three features: a Lesson Planner, a Doubt Solver, and an Assignments system.
+**EduAI** is an AI-powered personalized education platform. It uses OpenAI's `gpt-4o-mini` model to power three features: a Lesson Planner, a Doubt Solver, and an Assignments system.
 
 The repo is a monorepo with two independent sub-projects:
 
-- `backend/` — FastAPI + PostgreSQL + LangChain + Ollama (Gemma 4)
+- `backend/` — FastAPI + PostgreSQL + LangChain + OpenAI
 - `frontend/` — Next.js 16 + React 19 + Tailwind CSS 4
 
 ---
@@ -50,8 +50,7 @@ pip install -r requirements.txt
 Copy `backend/.env.example` → `backend/.env` and fill in values. Required:
 
 - `DATABASE_URL` — PostgreSQL connection string (psycopg3 format: `postgresql+psycopg://...`)
-
-No OpenAI key needed — all inference runs locally via Ollama.
+- `OPENAI_API_KEY` — OpenAI API key for LLM and embedding calls
 
 ---
 
@@ -70,12 +69,12 @@ npm run lint      # ESLint
 
 ## AI Model
 
-The project runs **Gemma 4 (gemma4:e2b)** locally via Ollama.
+The project uses **OpenAI** via the API.
 
-- Ollama must be running (`ollama serve`) before starting the backend.
-- The model must be pulled: `ollama pull gemma4:e2b`
-- All LLM and embedding calls go through `langchain-ollama` (`ChatOllama` / `OllamaEmbeddings`).
-- There is no OpenAI API key — do not add one.
+- Chat model: `gpt-4o-mini` (`ChatOpenAI`)
+- Embeddings: `text-embedding-3-small` (`OpenAIEmbeddings`)
+- All LLM and embedding calls go through `langchain-openai`.
+- `OPENAI_API_KEY` must be set in `.env`.
 
 ---
 
@@ -87,15 +86,15 @@ The project runs **Gemma 4 (gemma4:e2b)** locally via Ollama.
 
 **`backend/app/config/`** — Central config hub.
 
-- `settings.py`: Pydantic `Settings` from `.env`. Fields: `DATABASE_URL`, `IS_LLM_LIMIT`, `LLM_REQUESTS_PER_DAY`.
+- `settings.py`: Pydantic `Settings` from `.env`. Fields: `DATABASE_URL`, `OPENAI_API_KEY`, `IS_LLM_LIMIT`, `LLM_REQUESTS_PER_DAY`.
 - `database.py`: SQLAlchemy `engine`, `SessionLocal`, `Base`, `get_db` dependency.
-- `enums.py`: `ChatRole` (HUMAN/AI), `AIModel` (GEMMA4_E2B).
+- `enums.py`: `ChatRole` (HUMAN/AI), `AIModel` (GPT_4O_MINI).
 - `__init__.py`: Re-exports everything — always import from `app.config`.
 
-**`backend/app/ai/`** — AI layer (LangChain + Ollama).
+**`backend/app/ai/`** — AI layer (LangChain + OpenAI).
 
-- `llm.py`: `get_llm(temperature)` — cached `ChatOllama` instance using `gemma4:e2b`.
-- `embeddings.py`: `get_embeddings()` — cached `OllamaEmbeddings` using `gemma4:e2b`.
+- `llm.py`: `get_llm(temperature)` — cached `ChatOpenAI` instance using `gpt-4o-mini`.
+- `embeddings.py`: `get_embeddings()` — cached `OpenAIEmbeddings` using `text-embedding-3-small`.
 - `rag.py`: Full RAG pipeline — PGVector store, history-aware retriever, stuff-documents QA chain. `run_rag_chain()` and `stream_rag_chain()`. Documents filtered by `conversation_id`.
 - `memory.py`: Not yet implemented.
 
@@ -155,15 +154,15 @@ Subdirectories: `components/`, `hooks/`, `providers/`, `services/`, `store/`, `t
 ```
 Browser (Next.js :3000)
   └─► FastAPI (:8000) /api/...
-        ├─► lesson_plan_service ──► ChatOllama (Gemma 4 e2b via Ollama)
-        ├─► doubt_service ────────► ChatOllama (Gemma 4 e2b via Ollama)
-        ├─► assignment_service ───► ChatOllama (Gemma 4 e2b via Ollama)
+        ├─► lesson_plan_service ──► ChatOpenAI (gpt-4o-mini)
+        ├─► doubt_service ────────► ChatOpenAI (gpt-4o-mini)
+        ├─► assignment_service ───► ChatOpenAI (gpt-4o-mini)
         └─► PostgreSQL (SQLAlchemy)
               ├── lesson_plans
               ├── conversations + messages
               └── assignments + assignment_submissions
 ```
 
-### Gemma prompt patterns
+### Prompt patterns
 
-All services parse structured JSON from Gemma responses. Because small models sometimes wrap output in markdown fences, every service strips ` ```json ` / ` ``` ` before `json.loads()`. When writing new prompts, always instruct the model to "Return ONLY valid JSON (no markdown)".
+All services parse structured JSON from LLM responses. Every service strips ` ```json ` / ` ``` ` fences before `json.loads()`. When writing new prompts, always instruct the model to "Return ONLY valid JSON (no markdown)".
