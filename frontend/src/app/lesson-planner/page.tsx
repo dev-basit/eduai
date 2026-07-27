@@ -64,6 +64,9 @@ function PlanHistory({
 
       {!loading && plans.map((p) => {
         const active = selectedId === p.id;
+        const topics = p.topics ?? [];
+        const visibleTopics = topics.slice(0, 3);
+        const extraCount = topics.length - visibleTopics.length;
         return (
           <button key={p.id} onClick={() => onSelect(p)}
             className="w-full text-left px-4 py-3 transition-all border-b"
@@ -72,14 +75,25 @@ function PlanHistory({
               ...(active ? { background: "#ede9fe", borderLeft: "3px solid #7c3aed" } : {}),
             }}
           >
-            <div className="flex items-center gap-2 mb-0.5">
+            <div className="flex items-center gap-2 mb-1">
               <span className="w-2 h-2 rounded-full shrink-0" style={{ background: subjectColor(p.subject) }} />
               <div className="text-sm font-semibold text-gray-800 truncate">{p.subject}</div>
             </div>
-            <div className="text-xs text-gray-400 truncate ml-4 leading-relaxed">
-              {p.goal.length > 50 ? p.goal.slice(0, 50) + "…" : p.goal}
-            </div>
-            <div className="text-xs mt-1 ml-4" style={{ color: active ? "#7c3aed" : "#9ca3af" }}>
+            {visibleTopics.length > 0 && (
+              <div className="flex flex-wrap gap-1 ml-4 mb-1">
+                {visibleTopics.map((t) => (
+                  <span key={t} className="text-xs px-1.5 py-0.5 rounded-md truncate max-w-[80px]"
+                    style={{ background: active ? "#ddd6fe" : "#f3f4f6", color: active ? "#5b21b6" : "#6b7280" }}
+                  >{t}</span>
+                ))}
+                {extraCount > 0 && (
+                  <span className="text-xs px-1.5 py-0.5 rounded-md"
+                    style={{ background: active ? "#ddd6fe" : "#f3f4f6", color: active ? "#5b21b6" : "#6b7280" }}
+                  >+{extraCount}</span>
+                )}
+              </div>
+            )}
+            <div className="text-xs mt-0.5 ml-4" style={{ color: active ? "#7c3aed" : "#9ca3af" }}>
               {relativeDate(p.created_at)}
             </div>
           </button>

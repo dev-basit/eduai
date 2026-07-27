@@ -23,6 +23,7 @@ class LessonPlanResponse(BaseModel):
     id: uuid.UUID
     grade: str
     subject: str
+    topics: list[str] | None = None
     goal: str
     study_hours_per_day: float
     plan: dict

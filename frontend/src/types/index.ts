@@ -38,6 +38,7 @@ export interface LessonPlan {
   id: string;
   grade: string;
   subject: string;
+  topics?: string[];
   goal: string;
   study_hours_per_day: number;
   plan: LessonPlanContent;
