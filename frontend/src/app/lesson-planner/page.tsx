@@ -105,13 +105,13 @@ function PlanHistory({
 
 // ── Step 1: Form ───────────────────────────────────────────────
 
-type FormState = { subject: string; topicsRaw: string; goal: string; study_hours_per_day: number };
+type FormState = { subject: string; topicsRaw: string; goal: string; study_hours_per_day: number; days: number };
 
 function PlanForm({ onQuizReady }: {
   onQuizReady: (form: FormState, quiz: PlannerQuiz) => void;
 }) {
   const [form, setForm] = useState<FormState>({
-    subject: "", topicsRaw: "", goal: "", study_hours_per_day: 2,
+    subject: "", topicsRaw: "", goal: "", study_hours_per_day: 2, days: 7,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -215,6 +215,43 @@ function PlanForm({ onQuizReady }: {
           </div>
         </div>
 
+        <div>
+          <div className="flex items-center justify-between mb-2">
+            <label className="text-sm font-semibold text-gray-700">Number of days</label>
+            <div className="flex items-center gap-1.5">
+              <button type="button" onClick={() => setForm({ ...form, days: Math.max(1, form.days - 1) })}
+                className="w-7 h-7 rounded-lg text-sm font-bold flex items-center justify-center"
+                style={{ background: "#f3f4f6", color: "#374151" }}
+              >−</button>
+              <input
+                type="number" min="1" max="60"
+                className="w-14 text-center border border-gray-200 rounded-lg py-1 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-violet-500"
+                style={{ color: "#7c3aed" }}
+                value={form.days}
+                onChange={(e) => {
+                  const v = Math.max(1, Math.min(60, parseInt(e.target.value) || 1));
+                  setForm({ ...form, days: v });
+                }}
+              />
+              <button type="button" onClick={() => setForm({ ...form, days: Math.min(60, form.days + 1) })}
+                className="w-7 h-7 rounded-lg text-sm font-bold flex items-center justify-center"
+                style={{ background: "#f3f4f6", color: "#374151" }}
+              >+</button>
+            </div>
+          </div>
+          <div className="flex gap-2">
+            {[3, 5, 7, 14, 30].map((d) => (
+              <button key={d} type="button"
+                onClick={() => setForm({ ...form, days: d })}
+                className="flex-1 py-1.5 rounded-lg text-xs font-semibold transition-all"
+                style={form.days === d
+                  ? { background: "#7c3aed", color: "#fff" }
+                  : { background: "#f3f4f6", color: "#6b7280" }}
+              >{d}d</button>
+            ))}
+          </div>
+        </div>
+
         {error && (
           <div className="bg-red-50 border border-red-100 text-red-600 text-sm px-4 py-3 rounded-xl">{error}</div>
         )}
@@ -257,6 +294,7 @@ function PlanQuiz({ quiz, form, onPlanReady }: {
     const dto: LessonPlanCreateDTO = {
       subject: form.subject,
       goal: form.goal,
+      days: form.days,
       study_hours_per_day: form.study_hours_per_day,
       ...(topics.length > 0 && { topics }),
       quiz_questions: quiz.questions,
@@ -401,7 +439,7 @@ function DayCard({ day, index }: { day: DailyPlan; index: number }) {
         <div className="flex items-center gap-3">
           <span className="w-9 h-9 rounded-xl flex items-center justify-center text-xs font-bold text-white shrink-0"
             style={{ background: color }}
-          >{day.day.slice(0, 2)}</span>
+          >{index + 1}</span>
           <div>
             <div className="font-semibold text-gray-900 text-sm">{day.day}</div>
             <div className="text-xs text-gray-400 mt-0.5">
@@ -475,7 +513,7 @@ function PlanDetail({ plan, onNew, onImprove }: {
           >{plan.subject}</span>
           <p className="text-sm text-gray-500 max-w-xl leading-relaxed">{plan.goal}</p>
           <div className="text-xs text-gray-400 mt-1.5">
-            {plan.study_hours_per_day} hrs/day · {relativeDate(plan.created_at)}
+            {plan.days} days · {plan.study_hours_per_day} hrs/day · {relativeDate(plan.created_at)}
           </div>
         </div>
         <div className="flex flex-col items-end gap-2 shrink-0">

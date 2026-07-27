@@ -46,7 +46,7 @@ Return ONLY valid JSON (no markdown):
   "instructions": "Answer honestly — this helps us build the right plan for you. It should take about 3 minutes."
 }}"""
 
-_PLAN_PROMPT = """You are an expert educational planner creating a personalized 7-day study plan.
+_PLAN_PROMPT = """You are an expert educational planner creating a personalized {days}-day study plan.
 
 Student profile:
 - Subject: {subject}{topics_section}
@@ -73,7 +73,7 @@ Return ONLY valid JSON — no markdown, no explanation:
   "tips": ["Actionable study tip specific to this student's weak areas", "Tip 2", "Tip 3"]
 }}
 
-Generate all 7 days (Monday–Sunday). Each day must be specific to the student's topics and goal.
+Generate exactly {days} days (Day 1, Day 2, … Day {days}). Each day must be specific to the student's topics and goal.
 IMPORTANT for resources: only suggest free online resources (Khan Academy, YouTube channels, practice websites like Brilliant.org, Desmos, PhET simulations etc). Never suggest textbooks or paid materials."""
 
 
@@ -126,6 +126,7 @@ def generate_lesson_plan(body: LessonPlanCreate, db: Session, user_id: uuid.UUID
         subject=body.subject,
         topics_section=topics_section,
         goal=body.goal,
+        days=body.days,
         hours=body.study_hours_per_day,
         duration=int(body.study_hours_per_day * 60),
         skill_section=skill_section,
@@ -146,6 +147,7 @@ def generate_lesson_plan(body: LessonPlanCreate, db: Session, user_id: uuid.UUID
         grade=body.grade,
         subject=body.subject,
         topics=body.topics or None,
+        days=body.days,
         goal=body.goal,
         study_hours_per_day=body.study_hours_per_day,
         plan=plan_data,
@@ -156,7 +158,7 @@ def generate_lesson_plan(body: LessonPlanCreate, db: Session, user_id: uuid.UUID
     return LessonPlanResponse.model_validate(record)
 
 
-_IMPROVE_PROMPT = """You are an expert educational planner. A student has been following a lesson plan and completed real assignments. Use their actual performance data to generate an improved, targeted 7-day study plan.
+_IMPROVE_PROMPT = """You are an expert educational planner. A student has been following a lesson plan and completed real assignments. Use their actual performance data to generate an improved, targeted {days}-day study plan.
 
 Current plan context:
 - Subject: {subject}
@@ -194,7 +196,7 @@ Return ONLY valid JSON (no markdown):
   "tips": ["Tip addressing a specific mistake pattern seen in submissions", "Tip 2", "Tip 3"]
 }}
 
-Generate all 7 days (Monday–Sunday). Every day must directly reflect the performance data above."""
+Generate exactly {days} days (Day 1, Day 2, … Day {days}). Every day must directly reflect the performance data above."""
 
 
 def improve_lesson_plan(plan_id: uuid.UUID, db: Session) -> LessonPlanResponse:
@@ -246,6 +248,7 @@ def improve_lesson_plan(plan_id: uuid.UUID, db: Session) -> LessonPlanResponse:
     prompt = _IMPROVE_PROMPT.format(
         subject=plan.subject,
         goal=plan.goal,
+        days=plan.days,
         hours=plan.study_hours_per_day,
         duration=int(plan.study_hours_per_day * 60),
         skill_summary=skill_summary,
@@ -266,6 +269,7 @@ def improve_lesson_plan(plan_id: uuid.UUID, db: Session) -> LessonPlanResponse:
         grade=plan.grade,
         subject=plan.subject,
         topics=plan.topics,
+        days=plan.days,
         goal=plan.goal,
         study_hours_per_day=plan.study_hours_per_day,
         plan=new_plan_data,

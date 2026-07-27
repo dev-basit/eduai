@@ -13,6 +13,7 @@ class LessonPlanCreate(BaseModel):
     grade: str = ""
     subject: str
     topics: list[str] | None = None
+    days: int = 7
     goal: str
     study_hours_per_day: float
     quiz_questions: list[dict] | None = None
@@ -24,6 +25,7 @@ class LessonPlanResponse(BaseModel):
     grade: str
     subject: str
     topics: list[str] | None = None
+    days: int
     goal: str
     study_hours_per_day: float
     plan: dict

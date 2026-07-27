@@ -39,6 +39,7 @@ export interface LessonPlan {
   grade: string;
   subject: string;
   topics?: string[];
+  days: number;
   goal: string;
   study_hours_per_day: number;
   plan: LessonPlanContent;
@@ -48,6 +49,7 @@ export interface LessonPlan {
 export interface LessonPlanCreateDTO {
   subject: string;
   topics?: string[];
+  days: number;
   goal: string;
   study_hours_per_day: number;
   quiz_questions?: PlannerQuestion[];
