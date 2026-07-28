@@ -47,7 +47,7 @@ function PlanHistory({
         <div className="text-xs font-bold text-gray-400 uppercase tracking-widest">My Plans</div>
         <button
           onClick={onNew}
-          className="text-xs font-semibold px-2.5 py-1.5 rounded-lg"
+          className="text-xs font-semibold px-2.5 py-1.5 rounded-lg cursor-pointer"
           style={{ background: '#ede9fe', color: '#7c3aed' }}
         >
           + New
@@ -649,7 +649,7 @@ function PlanDetail({
         <div className="flex flex-col items-end gap-2 shrink-0">
           <button
             onClick={onNew}
-            className="text-xs font-semibold px-3.5 py-2 rounded-xl"
+            className="text-xs font-semibold px-3.5 py-2 rounded-xl cursor-pointer"
             style={{ background: '#ede9fe', color: '#7c3aed' }}
           >
             + New Plan

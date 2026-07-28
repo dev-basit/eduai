@@ -17,7 +17,7 @@ export default function Sidebar() {
     <aside className="w-60 shrink-0 flex flex-col min-h-screen" style={{ background: '#0d0d14' }}>
       {/* Logo */}
       <div className="px-5 py-6">
-        <div className="flex items-center gap-2.5">
+        <Link href="/" className="flex items-center gap-2.5 cursor-pointer">
           <div
             className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold"
             style={{ background: '#7c3aed' }}
@@ -30,7 +30,7 @@ export default function Sidebar() {
               AI Learning Platform
             </div>
           </div>
-        </div>
+        </Link>
       </div>
 
       {/* Nav */}

@@ -72,7 +72,7 @@ export default function LandingPage() {
         </div>
         <Link
           href="/dashboard"
-          className="px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90"
+          className="px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 cursor-pointer"
           style={{ background: '#7c3aed' }}
         >
           Go to Dashboard →
@@ -97,14 +97,14 @@ export default function LandingPage() {
         <div className="mt-8 flex items-center justify-center gap-3 flex-wrap">
           <Link
             href="/dashboard"
-            className="px-6 py-3.5 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90 hover:-translate-y-0.5"
+            className="px-6 py-3.5 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90 hover:-translate-y-0.5 cursor-pointer"
             style={{ background: '#7c3aed', boxShadow: '0 4px 14px rgba(124,58,237,0.35)' }}
           >
             Start Learning →
           </Link>
           <a
             href="#features"
-            className="px-6 py-3.5 rounded-xl text-sm font-bold border border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-white transition-all"
+            className="px-6 py-3.5 rounded-xl text-sm font-bold border border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-white transition-all cursor-pointer"
           >
             See Features ↓
           </a>
@@ -185,7 +185,7 @@ export default function LandingPage() {
         </p>
         <Link
           href="/dashboard"
-          className="inline-block px-8 py-4 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90 hover:-translate-y-0.5"
+          className="inline-block px-8 py-4 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90 hover:-translate-y-0.5 cursor-pointer"
           style={{ background: '#7c3aed', boxShadow: '0 4px 20px rgba(124,58,237,0.4)' }}
         >
           Go to Dashboard →
