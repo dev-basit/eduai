@@ -70,7 +70,7 @@ function AnsweringPhase({
   const answered = Object.values(answers).filter(Boolean).length;
 
   return (
-    <div className="max-w-2xl mx-auto p-8">
+    <div className="max-w-2xl mx-auto p-4 sm:p-8">
       {/* Header */}
       <div className="mb-6">
         <Link href="/dashboard/assignments" className="text-xs text-gray-400 hover:text-gray-600 transition-colors">
@@ -220,7 +220,7 @@ function ReviewingPhase({
   const gradeText = pct >= 80 ? '#166534' : pct >= 60 ? '#92400e' : '#991b1b';
 
   return (
-    <div className="max-w-2xl mx-auto p-8">
+    <div className="max-w-2xl mx-auto p-4 sm:p-8">
       {/* Score summary */}
       <div
         className="bg-white rounded-2xl p-6 mb-6 flex items-center gap-6"
@@ -382,7 +382,7 @@ function CompletePhase({
   const gradeText = pct >= 80 ? '#166534' : pct >= 60 ? '#92400e' : '#991b1b';
 
   return (
-    <div className="max-w-2xl mx-auto p-8">
+    <div className="max-w-2xl mx-auto p-4 sm:p-8">
       <Link
         href="/dashboard/assignments"
         className="text-xs text-gray-400 hover:text-gray-600 transition-colors block mb-6"

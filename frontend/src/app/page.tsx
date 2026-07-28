@@ -80,7 +80,7 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero */}
-      <section className="text-center px-6 py-24" style={{ background: '#f7f8fa' }}>
+      <section className="text-center px-6 py-16 sm:py-24" style={{ background: '#f7f8fa' }}>
         <div
           className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-6"
           style={{ background: '#ede9fe', color: '#7c3aed' }}
@@ -88,7 +88,7 @@ export default function LandingPage() {
           <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: '#7c3aed' }} />
           AI-Powered Education
         </div>
-        <h1 className="text-5xl font-black text-gray-900 leading-tight tracking-tight max-w-2xl mx-auto">
+        <h1 className="text-3xl sm:text-5xl font-black text-gray-900 leading-tight tracking-tight max-w-2xl mx-auto">
           Learn Smarter,<br />Not Harder.
         </h1>
         <p className="mt-5 text-lg text-gray-500 max-w-xl mx-auto leading-relaxed">
@@ -178,7 +178,7 @@ export default function LandingPage() {
       </section>
 
       {/* CTA */}
-      <section className="px-6 py-24 text-center" style={{ background: '#1c1c1e' }}>
+      <section className="px-6 py-16 sm:py-24 text-center" style={{ background: '#1c1c1e' }}>
         <h2 className="text-3xl font-black text-white mb-3">Ready to start learning?</h2>
         <p className="text-gray-400 mb-8 max-w-md mx-auto">
           Your personalized AI tutor is waiting. No login, no credit card — just open and go.

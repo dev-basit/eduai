@@ -31,17 +31,19 @@ function PlanHistory({
   onSelect,
   onNew,
   loading,
+  mobileOpen,
 }: {
   plans: LessonPlan[];
   selectedId: string | null;
   onSelect: (p: LessonPlan) => void;
   onNew: () => void;
   loading: boolean;
+  mobileOpen: boolean;
 }) {
   return (
     <aside
-      className="w-64 shrink-0 flex flex-col border-r overflow-y-auto"
-      style={{ borderColor: '#e5e7eb', background: '#fafafa' }}
+      className={`${mobileOpen ? 'flex' : 'hidden'} md:flex w-full md:w-64 shrink-0 flex-col border-r overflow-y-auto`}
+      style={{ borderColor: '#e5e7eb', background: '#fafafa', ...(mobileOpen ? { maxHeight: '45vh' } : {}) }}
     >
       <div className="px-4 pt-6 pb-3 flex items-center justify-between">
         <div className="text-xs font-bold text-gray-400 uppercase tracking-widest">My Plans</div>
@@ -755,6 +757,7 @@ export default function LessonPlannerPage() {
   const [plansLoading, setPlansLoading] = useState(true);
   const [selected, setSelected] = useState<LessonPlan | null>(null);
   const [mode, setMode] = useState<Mode>('form');
+  const [mobileHistoryOpen, setMobileHistoryOpen] = useState(false);
 
   // Quiz state passed between steps
   const [pendingForm, setPendingForm] = useState<FormState | null>(null);
@@ -802,16 +805,32 @@ export default function LessonPlannerPage() {
   };
 
   return (
-    <div className="flex h-full min-h-screen" style={{ background: '#f1f2f6' }}>
+    <div className="flex flex-col md:flex-row h-full min-h-screen" style={{ background: '#f1f2f6' }}>
+      {/* Mobile history toggle */}
+      <div
+        className="md:hidden flex items-center justify-between px-4 py-2.5 shrink-0 border-b bg-white"
+        style={{ borderColor: '#e5e7eb' }}
+      >
+        <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">My Plans</span>
+        <button
+          onClick={() => setMobileHistoryOpen(!mobileHistoryOpen)}
+          className="text-xs font-semibold cursor-pointer"
+          style={{ color: '#7c3aed' }}
+        >
+          {mobileHistoryOpen ? 'Hide ↑' : `Plans${plans.length > 0 ? ` (${plans.length})` : ''} ↓`}
+        </button>
+      </div>
       <PlanHistory
         plans={plans}
         selectedId={mode === 'view' ? (selected?.id ?? null) : null}
         onSelect={(p) => {
           setSelected(p);
           setMode('view');
+          setMobileHistoryOpen(false);
         }}
-        onNew={handleNew}
+        onNew={() => { handleNew(); setMobileHistoryOpen(false); }}
         loading={plansLoading}
+        mobileOpen={mobileHistoryOpen}
       />
 
       <main className="flex-1 overflow-y-auto">

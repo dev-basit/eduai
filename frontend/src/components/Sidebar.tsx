@@ -10,14 +10,25 @@ const nav = [
   { href: '/dashboard/doubt-solver', label: 'Doubt Solver', icon: '💬' },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ onClose }: { onClose?: () => void }) {
   const path = usePathname();
 
   return (
-    <aside className="w-60 shrink-0 flex flex-col min-h-screen" style={{ background: '#0d0d14' }}>
+    <aside className="w-60 shrink-0 flex flex-col h-full min-h-screen" style={{ background: '#0d0d14' }}>
+      {/* Mobile close button */}
+      {onClose && (
+        <div className="md:hidden flex justify-end px-4 pt-4 pb-0">
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-white text-2xl leading-none cursor-pointer transition-colors"
+          >
+            ×
+          </button>
+        </div>
+      )}
       {/* Logo */}
-      <div className="px-5 py-6">
-        <Link href="/" className="flex items-center gap-2.5 cursor-pointer">
+      <div className="px-5 py-5">
+        <Link href="/" onClick={onClose} className="flex items-center gap-2.5 cursor-pointer">
           <div
             className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold"
             style={{ background: '#7c3aed' }}
@@ -44,6 +55,7 @@ export default function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
+              onClick={onClose}
               className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all"
               style={active ? { background: '#7c3aed', color: '#ffffff' } : { color: '#9ca3af' }}
               onMouseEnter={(e) => {

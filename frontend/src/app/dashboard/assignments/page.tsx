@@ -37,11 +37,11 @@ function diffBadge(d: string) {
 
 // ── History sidebar ────────────────────────────────────────────
 
-function AssignmentHistory({ assignments, loading }: { assignments: Assignment[]; loading: boolean }) {
+function AssignmentHistory({ assignments, loading, mobileOpen }: { assignments: Assignment[]; loading: boolean; mobileOpen: boolean }) {
   return (
     <aside
-      className="w-64 shrink-0 flex flex-col border-r overflow-y-auto"
-      style={{ borderColor: '#e5e7eb', background: '#fafafa' }}
+      className={`${mobileOpen ? 'flex' : 'hidden'} md:flex w-full md:w-64 shrink-0 flex-col border-r overflow-y-auto`}
+      style={{ borderColor: '#e5e7eb', background: '#fafafa', ...(mobileOpen ? { maxHeight: '45vh' } : {}) }}
     >
       <div className="px-4 pt-6 pb-3">
         <div className="text-xs font-bold text-gray-400 uppercase tracking-widest">Past Assignments</div>
@@ -105,6 +105,7 @@ export default function AssignmentsPage() {
 
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [assignmentsLoading, setAL] = useState(true);
+  const [mobileHistoryOpen, setMobileHistoryOpen] = useState(false);
   const [plannerSubjects, setPlannerSubjects] = useState<PlannerSubject[]>([]);
   const [selectedSubject, setSelectedSubject] = useState<PlannerSubject | null>(null);
   const [customSubject, setCustomSubject] = useState('');
@@ -165,8 +166,22 @@ export default function AssignmentsPage() {
   };
 
   return (
-    <div className="flex h-full min-h-screen" style={{ background: '#f1f2f6' }}>
-      <AssignmentHistory assignments={assignments} loading={assignmentsLoading} />
+    <div className="flex flex-col md:flex-row h-full min-h-screen" style={{ background: '#f1f2f6' }}>
+      {/* Mobile history toggle */}
+      <div
+        className="md:hidden flex items-center justify-between px-4 py-2.5 shrink-0 border-b bg-white"
+        style={{ borderColor: '#e5e7eb' }}
+      >
+        <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Past Assignments</span>
+        <button
+          onClick={() => setMobileHistoryOpen(!mobileHistoryOpen)}
+          className="text-xs font-semibold cursor-pointer"
+          style={{ color: '#7c3aed' }}
+        >
+          {mobileHistoryOpen ? 'Hide ↑' : `History${assignments.length > 0 ? ` (${assignments.length})` : ''} ↓`}
+        </button>
+      </div>
+      <AssignmentHistory assignments={assignments} loading={assignmentsLoading} mobileOpen={mobileHistoryOpen} />
 
       <main className="flex-1 overflow-y-auto">
         <div className="max-w-lg mx-auto py-10 px-6">

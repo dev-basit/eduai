@@ -120,14 +120,15 @@ function ResourceDetail({ resource }: { resource: Resource }) {
 // ── Sidebar ────────────────────────────────────────────────────
 
 function ResourceSidebar({
-  resources, selectedId, onSelect, loading,
+  resources, selectedId, onSelect, loading, mobileOpen,
 }: {
   resources: Resource[]; selectedId: string | null;
-  onSelect: (r: Resource) => void; loading: boolean;
+  onSelect: (r: Resource) => void; loading: boolean; mobileOpen: boolean;
 }) {
   return (
-    <aside className="w-64 shrink-0 flex flex-col border-r overflow-y-auto"
-      style={{ borderColor: "#e5e7eb", background: "#fafafa" }}
+    <aside
+      className={`${mobileOpen ? 'flex' : 'hidden'} md:flex w-full md:w-64 shrink-0 flex-col border-r overflow-y-auto`}
+      style={{ borderColor: "#e5e7eb", background: "#fafafa", ...(mobileOpen ? { maxHeight: '45vh' } : {}) }}
     >
       <div className="px-4 pt-6 pb-3">
         <div className="text-xs font-bold text-gray-400 uppercase tracking-widest">My Resources</div>
@@ -179,6 +180,7 @@ export default function ResourcesPage() {
   const [resources, setResources] = useState<Resource[]>([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<Resource | null>(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     resourceService.list()
@@ -191,12 +193,27 @@ export default function ResourcesPage() {
   }, []);
 
   return (
-    <div className="flex h-full min-h-screen" style={{ background: "#f1f2f6" }}>
+    <div className="flex flex-col md:flex-row h-full min-h-screen" style={{ background: "#f1f2f6" }}>
+      {/* Mobile toggle */}
+      <div
+        className="md:hidden flex items-center justify-between px-4 py-2.5 shrink-0 border-b bg-white"
+        style={{ borderColor: '#e5e7eb' }}
+      >
+        <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">My Resources</span>
+        <button
+          onClick={() => setMobileOpen(!mobileOpen)}
+          className="text-xs font-semibold cursor-pointer"
+          style={{ color: '#7c3aed' }}
+        >
+          {mobileOpen ? 'Hide ↑' : `List${resources.length > 0 ? ` (${resources.length})` : ''} ↓`}
+        </button>
+      </div>
       <ResourceSidebar
         resources={resources}
         selectedId={selected?.id ?? null}
-        onSelect={setSelected}
+        onSelect={(r) => { setSelected(r); setMobileOpen(false); }}
         loading={loading}
+        mobileOpen={mobileOpen}
       />
 
       <main className="flex-1 overflow-y-auto">

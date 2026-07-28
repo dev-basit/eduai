@@ -285,7 +285,7 @@ export default function DoubtSolverPage() {
     <div className="h-full flex flex-col">
       {/* Header */}
       <div
-        className="px-8 py-4 flex items-center justify-between shrink-0"
+        className="px-4 sm:px-8 py-4 flex items-center justify-between shrink-0"
         style={{ background: "#fff", borderBottom: "1px solid #f1f2f6" }}
       >
         <div>
@@ -305,7 +305,7 @@ export default function DoubtSolverPage() {
       </div>
 
       {!convId ? (
-        <div className="flex-1 overflow-y-auto flex items-start justify-center p-8">
+        <div className="flex-1 overflow-y-auto flex items-start justify-center p-4 sm:p-8">
           <div className="w-full max-w-lg">
 
             {/* Step 1 — pick type */}
