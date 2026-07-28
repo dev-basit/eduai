@@ -155,7 +155,7 @@ export default function StartupModal() {
                 marginBottom: '8px',
               }}
             >
-              Starting up
+              Starting up (Wait 1-2 minutes)
             </h2>
 
             <p
