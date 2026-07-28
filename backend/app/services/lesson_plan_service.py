@@ -2,7 +2,7 @@ import json
 import uuid
 from sqlalchemy.orm import Session
 
-from app.ai.llm import get_llm
+from app.ai.llm import get_llm, llm_rate_limit
 from app.models.lesson_plan import LessonPlan
 from app.schemas.lesson_plan import LessonPlanCreate, LessonPlanResponse, QuizRequest
 
@@ -87,6 +87,7 @@ def generate_quiz(body: QuizRequest) -> dict:
         topics_section=topics_section,
         goal=body.goal,
     )
+    llm_rate_limit()
     llm = get_llm(temperature=0.7)
     response = llm.invoke(prompt)
     content = response.content.strip()
@@ -133,6 +134,7 @@ def generate_lesson_plan(body: LessonPlanCreate, db: Session, user_id: uuid.UUID
         focus_instruction=focus_instruction,
     )
 
+    llm_rate_limit()
     llm = get_llm(temperature=0.7)
     response = llm.invoke(prompt)
     content = response.content.strip()
@@ -259,6 +261,7 @@ def improve_lesson_plan(plan_id: uuid.UUID, db: Session) -> LessonPlanResponse:
         performance_summary=performance_summary,
     )
 
+    llm_rate_limit()
     llm = get_llm(temperature=0.7)
     response = llm.invoke(prompt)
     content = response.content.strip()

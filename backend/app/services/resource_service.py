@@ -2,7 +2,7 @@ import json
 import uuid
 from sqlalchemy.orm import Session
 
-from app.ai.llm import get_llm
+from app.ai.llm import get_llm, llm_rate_limit
 from app.models.lesson_plan import LessonPlan
 from app.models.resource import Resource
 from app.schemas.resource import ResourceResponse
@@ -64,6 +64,7 @@ def generate_resources(lesson_plan: LessonPlan, db: Session) -> ResourceResponse
         skill_section=skill_section,
     )
 
+    llm_rate_limit()
     llm = get_llm(temperature=0.6)
     response = llm.invoke(prompt)
     content = response.content.strip()

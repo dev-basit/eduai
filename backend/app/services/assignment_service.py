@@ -3,7 +3,7 @@ import uuid
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 
-from app.ai.llm import get_llm
+from app.ai.llm import get_llm, llm_rate_limit
 from app.models.assignment import Assignment, AssignmentSubmission
 from app.schemas.assignment import (
     AssignmentCreate, AssignmentResponse, CounterAnswersRequest,
@@ -188,6 +188,7 @@ def generate_assignment(body: AssignmentCreate, db: Session, user_id: uuid.UUID 
         num_questions=body.num_questions,
         skill_section=skill_section,
     )
+    llm_rate_limit()
     llm = get_llm(temperature=0.8)
     response = llm.invoke(prompt)
     content = response.content.strip()
@@ -230,6 +231,7 @@ def submit_assignment(assignment_id: uuid.UUID, body: SubmitAnswersRequest, db: 
         questions_json=json.dumps(questions_for_grading, indent=2),
         answers_json=json.dumps(body.answers, indent=2),
     )
+    llm_rate_limit()
     llm = get_llm(temperature=0.3)
     response = llm.invoke(prompt)
     content = response.content.strip()
@@ -274,6 +276,7 @@ def check_counter_answers(assignment_id: uuid.UUID, submission_id: uuid.UUID, bo
         return CounterCheckResponse(results=[], overall_understanding="No counter questions to evaluate.")
 
     prompt = _COUNTER_PROMPT.format(context_json=json.dumps(context, indent=2))
+    llm_rate_limit()
     llm = get_llm(temperature=0.3)
     response = llm.invoke(prompt)
     content = response.content.strip()

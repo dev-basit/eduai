@@ -2,7 +2,7 @@ import uuid
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 
-from app.ai.llm import get_llm
+from app.ai.llm import get_llm, llm_rate_limit
 from app.models.conversation import Conversation, Message
 from app.schemas.conversation import ConversationCreate, ConversationResponse, MessageResponse, AskRequest
 
@@ -125,6 +125,7 @@ def ask_doubt(conversation_id: uuid.UUID, body: AskRequest, db: Session) -> Mess
         messages.append(("human" if m.role == "human" else "assistant", m.content))
     messages.append(("human", body.question))
 
+    llm_rate_limit()
     llm = get_llm(temperature=0.5)
     response = llm.invoke(messages)
     answer = response.content.strip()
