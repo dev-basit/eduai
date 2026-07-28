@@ -73,7 +73,7 @@ function AnsweringPhase({
     <div className="max-w-2xl mx-auto p-8">
       {/* Header */}
       <div className="mb-6">
-        <Link href="/assignments" className="text-xs text-gray-400 hover:text-gray-600 transition-colors">
+        <Link href="/dashboard/assignments" className="text-xs text-gray-400 hover:text-gray-600 transition-colors">
           ← New Assignment
         </Link>
         <h1 className="text-xl font-bold text-gray-900 mt-2">{c.title}</h1>
@@ -384,7 +384,7 @@ function CompletePhase({
   return (
     <div className="max-w-2xl mx-auto p-8">
       <Link
-        href="/assignments"
+        href="/dashboard/assignments"
         className="text-xs text-gray-400 hover:text-gray-600 transition-colors block mb-6"
       >
         ← New Assignment
@@ -484,7 +484,7 @@ function CompletePhase({
       </div>
 
       <Link
-        href="/assignments"
+        href="/dashboard/assignments"
         className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold text-white"
         style={{ background: '#7c3aed' }}
       >

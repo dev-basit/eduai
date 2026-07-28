@@ -3,11 +3,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const nav = [
-  { href: '/', label: 'Dashboard', icon: '⊞' },
-  { href: '/lesson-planner', label: 'Lesson Planner', icon: '📅' },
-  { href: '/resources', label: 'Resources', icon: '📚' },
-  { href: '/assignments', label: 'Assignments', icon: '📝' },
-  { href: '/doubt-solver', label: 'Doubt Solver', icon: '💬' },
+  { href: '/dashboard', label: 'Dashboard', icon: '⊞' },
+  { href: '/dashboard/lesson-planner', label: 'Lesson Planner', icon: '📅' },
+  { href: '/dashboard/resources', label: 'Resources', icon: '📚' },
+  { href: '/dashboard/assignments', label: 'Assignments', icon: '📝' },
+  { href: '/dashboard/doubt-solver', label: 'Doubt Solver', icon: '💬' },
 ];
 
 export default function Sidebar() {
@@ -39,7 +39,7 @@ export default function Sidebar() {
           FEATURES
         </div>
         {nav.map((item) => {
-          const active = item.href === '/' ? path === '/' : path.startsWith(item.href);
+          const active = item.href === '/dashboard' ? path === '/dashboard' : path.startsWith(item.href);
           return (
             <Link
               key={item.href}

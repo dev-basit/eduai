@@ -289,7 +289,7 @@ export default function DoubtSolverPage() {
         style={{ background: "#fff", borderBottom: "1px solid #f1f2f6" }}
       >
         <div>
-          <Link href="/" className="text-xs text-gray-400 hover:text-gray-600 transition-colors">
+          <Link href="/dashboard" className="text-xs text-gray-400 hover:text-gray-600 transition-colors">
             ← Dashboard
           </Link>
           <h1 className="text-lg font-bold text-gray-900 mt-0.5">AI Doubt Solver</h1>
@@ -384,7 +384,7 @@ export default function DoubtSolverPage() {
                   assignments.length === 0 ? (
                     <div className="text-sm text-gray-400 text-center py-12">
                       No assignments yet.{" "}
-                      <Link href="/assignments" className="text-violet-600 hover:underline">
+                      <Link href="/dashboard/assignments" className="text-violet-600 hover:underline">
                         Create one first.
                       </Link>
                     </div>
@@ -407,7 +407,7 @@ export default function DoubtSolverPage() {
                 ) : plans.length === 0 ? (
                   <div className="text-sm text-gray-400 text-center py-12">
                     No lesson plans yet.{" "}
-                    <Link href="/lesson-planner" className="text-violet-600 hover:underline">
+                    <Link href="/dashboard/lesson-planner" className="text-violet-600 hover:underline">
                       Create one first.
                     </Link>
                   </div>

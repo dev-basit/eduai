@@ -68,7 +68,7 @@ function AssignmentHistory({ assignments, loading }: { assignments: Assignment[]
           return (
             <Link
               key={a.id}
-              href={`/assignments/${a.id}`}
+              href={`/dashboard/assignments/${a.id}`}
               className="block px-4 py-3 border-b transition-all hover:bg-gray-100"
               style={{ borderColor: '#f3f4f6' }}
             >
@@ -157,7 +157,7 @@ export default function AssignmentsPage() {
         ...(skillLevel ? { skill_level: skillLevel } : {}),
       });
       setAssignments((prev) => [assignment, ...prev]);
-      router.push(`/assignments/${assignment.id}`);
+      router.push(`/dashboard/assignments/${assignment.id}`);
     } catch (err) {
       setError((err as ApiError).message ?? 'Failed to generate assignment');
       setLoading(false);
